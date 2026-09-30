@@ -74,6 +74,14 @@ namespace CAIME
         }
 
         /// <summary>
+        /// Upscale current project
+        /// </summary>
+        private void Upscale_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Upscale();
+        }
+
+        /// <summary>
         /// Rename campaign map
         /// </summary>
         private void RenameMap_Click(object sender, RoutedEventArgs e)

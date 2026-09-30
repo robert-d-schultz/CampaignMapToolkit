@@ -189,6 +189,11 @@ namespace CAIME.ViewModels
             EditorViewModel.ResizeMap();
         }
 
+        public void Upscale()
+        {
+            EditorViewModel.UpscaleMap();
+        }
+
         public void RenameCampaignMap()
         {
             EditorViewModel.RenameCampaignMap();

@@ -311,6 +311,8 @@
     <Compile Include="Classes\MapHex\MapHexEditor.GroundTypes.cs" />
     <Compile Include="Classes\MapHex\MapHexEditor.Regions.cs" />
     <Compile Include="Classes\MapHex\MapHexFile.cs" />
+    <Compile Include="Classes\Upscaler\HexGeometry.cs" />
+    <Compile Include="Classes\Upscaler\MapUpscaler.cs" />
     <Compile Include="Classes\Common\UndoRedoManager.cs" />
     <Compile Include="Classes\Common\HotkeyManager.cs" />
     <Compile Include="Classes\Editor\Painters\BrushPainter.cs" />
@@ -431,6 +433,7 @@
     <Compile Include="ViewModels\Common\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Common\MenuViewModel.cs" />
     <Compile Include="ViewModels\Common\ResizeViewModel.cs" />
+    <Compile Include="ViewModels\Common\UpscaleViewModel.cs" />
     <Compile Include="ViewModels\Common\PreferencesViewModel.cs" />
     <Compile Include="ViewModels\Editor\Actions\ActionsViewModel.cs" />
     <Compile Include="ViewModels\Editor\Actions\BorderActionsControlViewModel.cs" />
@@ -562,6 +565,9 @@
     </Compile>
     <Compile Include="Views\Windows\ResizeWindow.xaml.cs">
       <DependentUpon>ResizeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\UpscaleWindow.xaml.cs">
+      <DependentUpon>UpscaleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\MapHexFile\RenameSwatchWindow.xaml.cs">
       <DependentUpon>RenameSwatchWindow.xaml</DependentUpon>
@@ -796,6 +802,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Windows\ResizeWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Windows\UpscaleWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

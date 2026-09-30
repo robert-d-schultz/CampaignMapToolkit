@@ -131,6 +131,7 @@ The **Menu Bar** is the horizontal row of menus just below the title bar. Click 
 | **Undo** | Ctrl+Z | Reverses your last painting action |
 | **Redo** | Ctrl+Y | Re-applies an action you just undid |
 | **Resize** | Ctrl+Shift+R | Opens the *Map Resize* window to change the map dimensions |
+| **Upscale** | — | Opens the *Upscale map* window to enlarge the whole map by a scale factor. *Preserve structure* keeps settlements at their original size and roads and rivers one hex wide; *Nearest neighbour* scales every layer up evenly, settlements included |
 | **Rename map** | Ctrl+Shift+N | Opens a dialog to rename your campaign map |
 
 ---

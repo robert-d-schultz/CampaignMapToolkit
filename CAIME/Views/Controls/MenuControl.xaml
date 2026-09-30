@@ -66,6 +66,10 @@
                       Click="Resize_Click"
                       IsEnabled="{Binding Source={x:Static local:AppStateContext.Instance},
                                           Path=IsResizeEnabled}"/>
+            <MenuItem Header="Upscale"
+                      Click="Upscale_Click"
+                      IsEnabled="{Binding Source={x:Static local:AppStateContext.Instance},
+                                          Path=IsUpscaleEnabled}"/>
             <MenuItem Header="Rename map"
                       InputGestureText="Ctrl+Shift+N"
                       Click="RenameMap_Click"

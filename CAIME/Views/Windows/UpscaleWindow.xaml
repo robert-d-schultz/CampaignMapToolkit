@@ -1,0 +1,146 @@
+<Window x:Class="CAIME.Views.Windows.UpscaleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CAIME.Views.Windows"
+        mc:Ignorable="d"
+        Title="Upscale map"
+        Height="Auto"
+        Width="Auto"
+        MinWidth="380"
+        MaxWidth="380"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        Background="{StaticResource BackgroundDarkV1Brush}">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="5"
+                   Text="Current size"
+                   Foreground="White"
+                   VerticalAlignment="Center" />
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Margin="5"
+                   Foreground="White"
+                   VerticalAlignment="Center">
+            <Run Text="{Binding OldWidth, Mode=OneWay, FallbackValue=old_width}" />
+            <Run Text=" x " />
+            <Run Text="{Binding OldHeight, Mode=OneWay, FallbackValue=old_height}" />
+        </TextBlock>
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   Margin="5"
+                   Text="New width"
+                   Foreground="White"
+                   VerticalAlignment="Center" />
+
+        <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                 Margin="5"
+                 Width="75"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Center"
+                 Text="{Binding NewWidth}"
+                 Style="{StaticResource DarkTextBox}"
+                 Name="newWidthTextBox" />
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Margin="5"
+                   Text="New height"
+                   Foreground="White"
+                   VerticalAlignment="Center" />
+
+        <TextBox Grid.Row="2"
+                 Grid.Column="1"
+                 Margin="5"
+                 Width="75"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Center"
+                 Text="{Binding NewHeight}"
+                 Style="{StaticResource DarkTextBox}"
+                 Name="newHeightTextBox" />
+
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Margin="5"
+                   Text="Scale factor"
+                   Foreground="White"
+                   VerticalAlignment="Center" />
+
+        <TextBlock Grid.Row="3"
+                   Grid.Column="1"
+                   Margin="5"
+                   Foreground="White"
+                   VerticalAlignment="Center"
+                   Text="{Binding FactorDisplay, Mode=OneWay, FallbackValue=factor}" />
+
+        <TextBlock Grid.Row="4"
+                   Grid.Column="0"
+                   Margin="5"
+                   Text="Method"
+                   Foreground="White"
+                   VerticalAlignment="Center" />
+
+        <ComboBox Grid.Row="4"
+                  Grid.Column="1"
+                  Margin="5"
+                  MinWidth="150"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Center"
+                  Style="{StaticResource DarkFlatComboBox}"
+                  ItemsSource="{Binding Methods}"
+                  SelectedIndex="{Binding SelectedMethodIndex}" />
+
+        <Separator Grid.Row="5"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Margin="0 5"
+                   Background="{StaticResource BackgroundDarkV3Brush}" />
+
+        <StackPanel Grid.Row="6"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+            <Button x:Name="confirmButton"
+                    Content="Confirm"
+                    Padding="15 3"
+                    Margin="0 5 0 5"
+                    Style="{StaticResource DarkButton}"
+                    Click="ConfirmButton_Click" />
+
+            <Button x:Name="cancelButton"
+                    Content="Cancel"
+                    IsCancel="True"
+                    Padding="15 3"
+                    Margin="2 5 0 5"
+                    Style="{StaticResource DarkButton}"
+                    Click="CancelButton_Click" />
+
+        </StackPanel>
+    </Grid>
+</Window>

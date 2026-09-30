@@ -350,6 +350,19 @@ namespace CAIME
             }
         }
 
+        public void UpscaleMap()
+        {
+            if (ProjectManager.IsProjectOpen)
+            {
+                var window = new UpscaleWindow(ProjectManager)
+                {
+                    Owner = Application.Current.MainWindow
+                };
+
+                window.Show();
+            }
+        }
+
         public void RenameCampaignMap()
         {
             if (ProjectManager.IsProjectOpen)

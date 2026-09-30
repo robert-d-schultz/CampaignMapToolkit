@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
+using CAIME.Upscaler;
 using Force.Crc32;
 
 namespace CAIME
@@ -348,6 +349,21 @@ namespace CAIME
             return true;
         }
 
+        /// <summary>
+        /// Swaps in a whole new grid (dimensions + hex array) in one step. Used by
+        /// <see cref="Upscaler.MapUpscaler"/>, which builds the upscaled grid outside this class and
+        /// then needs to install it before running the neighbour-dependent passes
+        /// (<see cref="UpdateHexTypes"/>, edge mask recompute) that read <see cref="MapWidth"/>/
+        /// <see cref="MapHeight"/> via <see cref="GetNeighbour(Hex, ushort)"/>.
+        /// </summary>
+        internal void ReplaceGrid(uint width, uint height, Hex[] hexData)
+        {
+            this.MapWidth  = width;
+            this.MapHeight = height;
+            this.Capacity  = width * height;
+            this.HexData   = hexData;
+        }
+
         public bool ResizeMapHex(uint newWidth, uint newHeight, int newPadRight, int newPadLeft, int newPadTop, int newPadBottom)
         {
             var resizedHexData = CreateEmptyHexData(newWidth, newHeight);
@@ -399,6 +415,51 @@ namespace CAIME
             this.MapHeight = newHeight;
             this.Capacity = newWidth * newHeight;
             this.HexData = resizedHexData;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Nearest-neighbour upscale: every new hex copies the source hex nearest to it, like scaling
+        /// a bitmap with no interpolation. Every layer scales up by the same factor - a town's sprawl,
+        /// a river's width, and the coastline included. The structure-preserving alternative is
+        /// <see cref="Upscaler.MapUpscaler"/>.
+        /// </summary>
+        public bool UpscaleMapHex(double factor)
+        {
+            if (factor <= 1.0)
+            {
+                return false;
+            }
+
+            var upscaledHexData = ReplicateHexBlocks(this.HexData, this.MapWidth, this.MapHeight, factor, out uint newWidth, out uint newHeight, out int[] sourceIndexPerNewHex);
+
+            // A town slot must stay a single hex - copying it onto every new hex that sampled the same
+            // source would stack several copies of the same slot. It is kept on the first new hex (in
+            // scan order) that sampled each source; the other copies keep their sprawl, so the town
+            // stays one connected blob.
+            var seenSource = new bool[this.HexData.Length];
+            for (int i = 0; i < upscaledHexData.Length; ++i)
+            {
+                int sourceIndex = sourceIndexPerNewHex[i];
+                if (!seenSource[sourceIndex])
+                {
+                    seenSource[sourceIndex] = true;
+                }
+                else
+                {
+                    upscaledHexData[i].TownSlotIndex = Hex.INVALID_SLOT_INDEX;
+                }
+            }
+
+            ReplaceGrid(newWidth, newHeight, upscaledHexData);
+
+            // Adjacency is entirely different at the new resolution, so terrain-derived state and
+            // edge masks must be rebuilt rather than reused from the source hexes.
+            UpdateHexTypes();
+            CalculateRoadEdgeMasks();
+            CalculateRiverEdgeMasks();
+            CalculateRegionEdgeMasks();
 
             return true;
         }
@@ -1107,6 +1168,52 @@ namespace CAIME
         #endregion
 
         #region Static methods
+
+        /// <summary>
+        /// Tiles a new <paramref name="factor"/>x grid with nearest-neighbour clones of each source
+        /// hex - the block-fill shared by the nearest-neighbour upscaler (<see cref="UpscaleMapHex"/>)
+        /// and the structure-preserving one (<see cref="Upscaler.MapUpscaler"/>), which overlays
+        /// settlement/river/road/coastline fixups on top of this base.
+        ///
+        /// Each new hex's centre is shrunk back onto the source grid and takes the source hex it lands
+        /// in (<see cref="Upscaler.HexGeometry"/>). Dividing <see cref="Hex.Q"/>/<see cref="Hex.R"/>
+        /// by <paramref name="factor"/> per axis would instead treat the grid as a rectangular raster
+        /// and ignore that odd columns sit half a row higher than even ones, leaving jagged edges
+        /// wherever two source hexes meet.
+        /// </summary>
+        internal static Hex[] ReplicateHexBlocks(Hex[] oldData, uint oldWidth, uint oldHeight, double factor, out uint newWidth, out uint newHeight, out int[] sourceIndexPerNewHex)
+        {
+            newWidth  = (uint)Math.Max(1, Math.Round(oldWidth  * factor));
+            newHeight = (uint)Math.Max(1, Math.Round(oldHeight * factor));
+
+            var newData = CreateEmptyHexData(newWidth, newHeight);
+            sourceIndexPerNewHex = new int[newWidth * newHeight];
+
+            for (int row = 0; row < newHeight; ++row)
+            {
+                for (int col = 0; col < newWidth; ++col)
+                {
+                    var (x, y)   = HexGeometry.Centre(col, row);
+                    var (sq, sr) = HexGeometry.NearestHex(x / factor, y / factor);
+
+                    int originalCol = Math.Min(Math.Max(sq, 0), (int)oldWidth  - 1);
+                    int originalRow = Math.Min(Math.Max(sr, 0), (int)oldHeight - 1);
+
+                    int newIndex    = (int)((row * newWidth) + col);
+                    int sourceIndex = (int)((originalRow * oldWidth) + originalCol);
+
+                    var hex = oldData[sourceIndex].Clone();
+                    hex.Q     = col;
+                    hex.R     = row;
+                    hex.Index = newIndex;
+
+                    newData[newIndex]              = hex;
+                    sourceIndexPerNewHex[newIndex]  = sourceIndex;
+                }
+            }
+
+            return newData;
+        }
 
         private static Hex[] CreateEmptyHexData(uint width, uint height)
         {

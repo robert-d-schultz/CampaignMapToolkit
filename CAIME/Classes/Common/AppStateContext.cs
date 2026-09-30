@@ -36,6 +36,7 @@ namespace CAIME
             context.IsUndoItemEnabled               = false;
             context.IsRedoItemEnabled               = false;
             context.IsResizeEnabled                 = false;
+            context.IsUpscaleEnabled                = false;
             context.IsRenameMapEnabled              = false;
             context.IsBrushSizeSliderEnabled        = false;
             context.IsBackImgSliderEnabled          = false;
@@ -82,6 +83,7 @@ namespace CAIME
             context.IsSaveItemEnabled               = true;
             context.IsCloseItemEnabled              = true;
             context.IsResizeEnabled                 = true;
+            context.IsUpscaleEnabled                = true;
             context.IsRenameMapEnabled              = true;
             context.BrushSizeSliderVisibility       = Visibility.Visible;
             context.IsGroundTypesValidatorEnabled   = true;
@@ -480,6 +482,19 @@ namespace CAIME
             {
                 isResizeEnabled = value;
                 OnPropertyChanged(nameof(IsResizeEnabled));
+            }
+        }
+        private bool isUpscaleEnabled;
+        public bool IsUpscaleEnabled
+        {
+            get
+            {
+                return isUpscaleEnabled;
+            }
+            set
+            {
+                isUpscaleEnabled = value;
+                OnPropertyChanged(nameof(IsUpscaleEnabled));
             }
         }
         private bool isRenameMapEnabled;

@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using CAIME.Exporters;
 using CAIME.TradeNetwork;
+using CAIME.Upscaler;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace CAIME
@@ -255,6 +256,11 @@ namespace CAIME
             }
 
             return false;
+        }
+
+        public bool Upscale(double factor)
+        {
+            return MapHexFile.UpscaleMapHex(factor);
         }
 
         public void UpdatePath(string newPath)
@@ -629,6 +635,17 @@ namespace CAIME
             {
                 OnMapResized?.Invoke(this, new RoutedEventArgs());
                 LoggerViewModel.Log("The hex map has been resized!", LogLevel.Info);
+            }
+        }
+
+        public void UpscaleProject(double factor, bool preserveStructure)
+        {
+            bool upscaled = preserveStructure ? MapUpscaler.Upscale(Project, factor) : Project.Upscale(factor);
+            if (upscaled)
+            {
+                OnMapResized?.Invoke(this, new RoutedEventArgs());
+                var factorText = factor.ToString("0.####");
+                LoggerViewModel.Log($"The hex map has been upscaled by a factor of {factorText}!", LogLevel.Info);
             }
         }
 
