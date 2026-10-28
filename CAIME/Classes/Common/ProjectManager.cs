@@ -757,7 +757,7 @@ namespace CAIME
                 return false;
             }
 
-            return ProcessMapData.Process(Project, ToolsPath);
+            return ProcessMapData.Process(Project);
         }
 
         public bool ProcessDynamicResourcesEsf()

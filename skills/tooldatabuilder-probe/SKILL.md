@@ -1,6 +1,6 @@
 ---
 name: tooldatabuilder-probe
-description: Find out which files and database table columns a Total War Assembly Kit data builder (the ToolDataBuilder DLL MapDataBuilder drives) reads to build map_data.esf or dynamic_resources.esf, and which of them actually change the output - by tracing its file opens and by rebuilding with each table, row and column taken away or changed. Use it when a game or an Assembly Kit update changes what MapDataBuilder needs, to check the tables CAIME writes for the RPFM database source (MapDataBuilderTables), or to see how a game's CA::String is laid out.
+description: Find out which files and database table columns a Total War Assembly Kit data builder (the ToolDataBuilder DLL MapDataBuilder drives) reads to build map_data.esf or dynamic_resources.esf, and which of them actually change the output - by tracing its file opens and by rebuilding with each table, row and column taken away or changed. Use it when a game or an Assembly Kit update changes what MapDataBuilder needs, or to see how a game's CA::String is laid out.
 ---
 
 # ToolDataBuilder probe
@@ -46,8 +46,7 @@ match Attila and Troy Warhammer 2 or Pharaoh.
   `overlay_file`, `sea_trade` (and `minx`/`miny` on Rome II and Attila) matter too, but
   disassembly shows no installed builder writes `overlay_file` or `sea_trade`, and only Rome II
   and Attila read `minx`/`miny` (see `FileFormatDefinitions/map_data_esf_open_questions.md`). `regions`, settlements and ground types need one
-  row of any content. Bare one-row tables give byte-identical output in every game tested, which is
-  what `CAIME/Classes/Exporters/MapData/MapDataBuilderTables.cs` writes.
+  row of any content. Bare one-row tables give byte-identical output in every game tested.
 - A missing table crashes the DLL or fails it; an empty one crashes it; no `campaign_maps` row for
   the map makes it report success yet write nothing.
 - dyn_res reads the same five tables from `raw_data/EmpireDesignData`, not `raw_data/db`.
