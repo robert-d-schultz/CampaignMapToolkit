@@ -43,9 +43,9 @@ match Attila and Troy Warhammer 2 or Pharaoh.
   `campaign_map_slots`, which may be empty), plus the map's `map.hex`. Never the TWaD schemas.
 - What changes the output: the map's `campaign_map_playable_areas` row's `index` and `maxx`. Rome II
   stores its `maxy` without using it; every other bound only has to be present. Probe runs suggested
-  `overlay_file`, `sea_trade` (and `minx`/`miny` on Rome II and Attila) matter too, but Warhammer
-  III's DLL reads `overlay_file` and `sea_trade` without writing them and never reads `minx`/`miny`;
-  the other games are unconfirmed (see `FileFormatDefinitions/map_data_esf_open_questions.md`). `regions`, settlements and ground types need one
+  `overlay_file`, `sea_trade` (and `minx`/`miny` on Rome II and Attila) matter too, but
+  disassembly shows no installed builder writes `overlay_file` or `sea_trade`, and only Rome II
+  and Attila read `minx`/`miny` (see `FileFormatDefinitions/map_data_esf_open_questions.md`). `regions`, settlements and ground types need one
   row of any content. Bare one-row tables give byte-identical output in every game tested, which is
   what `CAIME/Classes/Exporters/MapData/MapDataBuilderTables.cs` writes.
 - A missing table crashes the DLL or fails it; an empty one crashes it; no `campaign_maps` row for
