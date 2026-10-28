@@ -50,7 +50,7 @@ namespace CAIME.Tests.Unit
         [TestMethod]
         public void ReadTheatre_ParsesMaxXToTheSameFloat()
         {
-            // RPFM prints each f32 in its shortest round-trip form.
+            // Parsed straight to a float, not through a double, so the text's own float is kept.
             var theatre = MapDataWriter.ReadTheatre(GameTemplate.Pharaoh, MapName, PlayableAreas(
                 PlayableArea(MapName, index: "1", maxX: "756.83997", maxY: "0")));
 
