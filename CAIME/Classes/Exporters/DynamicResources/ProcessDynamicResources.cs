@@ -39,8 +39,8 @@ namespace CAIME.Exporters
 
             try
             {
-                var regions = DynamicResourceRegions.Find(map, DynamicResourcesImage.Load(imagePath), DynamicResourceType.LoadDatabase(databasePath));
-                var bytes   = DynamicResourcesWriter.Write(regions, DateTime.UtcNow);
+                var regions = DynamicResourceRegions.Find(map, DynamicResourcesImage.Load(imagePath), DynamicResourceType.LoadDatabase(databasePath), project.Game);
+                var bytes   = DynamicResourcesWriter.Write(regions, DateTime.UtcNow, project.Game);
 
                 Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
                 File.WriteAllBytes(outputFilePath, bytes);
